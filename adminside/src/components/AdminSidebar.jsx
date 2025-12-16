@@ -51,11 +51,20 @@ const AdminSidebar = () => {
         </li>
         <li>
           <NavLink
-            to="/admin/feedback"
+            to="/admin/BookPackage"
             className={({ isActive }) => (isActive ? activeClass : normalClass)}
           >
             <FaCommentDots />
-            <span>Feedback</span>
+            <span>BookPackage</span>
+          </NavLink>
+        </li>
+        <li>
+         <NavLink
+            to="/admin/ViewBooking"
+            className={({ isActive }) => (isActive ? activeClass : normalClass)}
+          >
+            <FaCommentDots />
+            <span>ViewBooking</span>
           </NavLink>
         </li>
       </ul>

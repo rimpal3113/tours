@@ -1,69 +1,95 @@
-// Destination.jsx
-import React from "react";
-
-const destinations = [
-  {
-    title: "Manali Paradise",
-    desc: "Experience breathtaking Himalayan beauty with adventure sports and serene valleys in Manali.",
-    price: "₹24,999",
-    img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=250&fit=crop",
-    link: "tours.html",
-  },
-  {
-    title: "Goa Beach Paradise",
-    desc: "Relax on pristine beaches, enjoy water sports, and experience vibrant nightlife in Goa.",
-    price: "₹22,999",
-    img: "https://images.unsplash.com/photo-1464822759844-d150f39ac1ac?w=400&h=250&fit=crop",
-    link: "tours.html",
-  },
-  {
-    title: "Haridwar Spiritual Journey",
-    desc: "Witness sacred Ganga Aarti, visit ancient temples, and find spiritual peace in Haridwar.",
-    price: "₹15,999",
-    img: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=250&fit=crop",
-    link: "tours.html",
-  },
-];
+import React, { useEffect, useState } from "react";
 
 const Destination = () => {
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch all bookings
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/bookings");
+        const data = await res.json();
+        setBookings(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to fetch bookings:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBookings();
+  }, []);
+
+  // Skeleton loader for loading state
+  const SkeletonCard = () => (
+    <div className="bg-white rounded-xl p-6 animate-pulse">
+      <div className="w-full h-48 bg-gray-200 rounded-md mb-4"></div>
+      <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+      <div className="h-4 bg-gray-200 rounded w-full mb-1"></div>
+      <div className="h-4 bg-gray-200 rounded w-5/6 mb-1"></div>
+      <div className="h-4 bg-gray-200 rounded w-2/3 mb-1"></div>
+    </div>
+  );
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Popular Destinations
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+            Booked Packages
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Choose from our handpicked collection of extraordinary destinations around the world
-          </p>
+          <p className="text-gray-600">All booked packages</p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {destinations.map((dest, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 animate-fade-in"
-            >
-              <img
-                src={dest.img}
-                alt={dest.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{dest.title}</h3>
-                <p className="text-gray-600 mb-4">{dest.desc}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold text-green-600">{dest.price}</span>
-                  <a
-                    href={dest.link}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
-                  >
-                    Learn More
-                  </a>
+
+        {loading && (
+          <div className="grid md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        )}
+
+        {!loading && bookings.length === 0 && (
+          <p className="text-center text-gray-500">No bookings found</p>
+        )}
+
+        {!loading && bookings.length > 0 && (
+          <div className="grid md:grid-cols-3 gap-8">
+            {bookings.map((book) => (
+              <div
+                key={book.id}
+                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition"
+              >
+                {book.pack_img && (
+                  <img
+                    src={`http://localhost:5000/uploads/${book.pack_img}`}
+                    alt={book.pack_name}
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                  />
+                )}
+
+                <h3 className="text-xl font-bold mb-2">{book.pack_name}</h3>
+
+                <div className="space-y-2 text-gray-700">
+                 
+                  <p>
+                    <span className="font-semibold">Price / Person:</span> ₹{book.price_per_person}
+                  </p>
+                  
                 </div>
+
+                <div className="mt-4">
+                  <p className="font-semibold">Description</p>
+                  <p>{book.desc_txt}</p>
+                </div>
+
+                <span className="inline-block bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full mt-4">
+                  Booked
+                </span>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

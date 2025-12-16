@@ -6,10 +6,11 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import AddPackages from "./pages/AddPackages";
 import ViewPackages from "./pages/ViewPackages";
-import ViewFeedback from "./pages/ViewFeedback";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminViewContacts from "./pages/ViewContactDetails";
+import BookPackage from "./pages/BookPackage";
+import ViewBooking from "./pages/ViewBooking";
 
 const App = () => {
   return (
@@ -57,10 +58,18 @@ const App = () => {
                   }
                 />
                 <Route
-                  path="/admin/Feedback"
+                  path="/admin/BookPackage"
                   element={
                     <ProtectedRoute>
-                      <ViewFeedback />
+                      <BookPackage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/ViewBooking"
+                  element={
+                    <ProtectedRoute>
+                      <ViewBooking />
                     </ProtectedRoute>
                   }
                 />
