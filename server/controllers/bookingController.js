@@ -123,3 +123,5 @@ export const deleteBooking = (req, res) => {
     res.json({ message: "Booking deleted successfully" });
   });
 };
+
+

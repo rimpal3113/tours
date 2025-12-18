@@ -54,7 +54,7 @@ const AdminSidebar = () => {
             to="/admin/BookPackage"
             className={({ isActive }) => (isActive ? activeClass : normalClass)}
           >
-            <FaCommentDots />
+            <FaBoxOpen  />
             <span>BookPackage</span>
           </NavLink>
         </li>
@@ -63,8 +63,26 @@ const AdminSidebar = () => {
             to="/admin/ViewBooking"
             className={({ isActive }) => (isActive ? activeClass : normalClass)}
           >
-            <FaCommentDots />
+            <FaEye />
             <span>ViewBooking</span>
+          </NavLink>
+        </li>
+        <li>
+         <NavLink
+            to="/admin/HotelBooking"
+            className={({ isActive }) => (isActive ? activeClass : normalClass)}
+          >
+            <FaEye />
+            <span>HotelBooking</span>
+          </NavLink>
+        </li>
+        <li>
+         <NavLink
+            to="/admin/BookingConfirm"
+            className={({ isActive }) => (isActive ? activeClass : normalClass)}
+          >
+            <FaEye />
+            <span>BookingConfirm</span>
           </NavLink>
         </li>
       </ul>

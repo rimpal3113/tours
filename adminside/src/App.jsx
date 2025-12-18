@@ -11,6 +11,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminViewContacts from "./pages/ViewContactDetails";
 import BookPackage from "./pages/BookPackage";
 import ViewBooking from "./pages/ViewBooking";
+import HotelBooking from "./pages/HotelBooking";
+import BookingConfirm from "./pages/BookingConfirm";
 
 const App = () => {
   return (
@@ -70,6 +72,22 @@ const App = () => {
                   element={
                     <ProtectedRoute>
                       <ViewBooking />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/HotelBooking"
+                  element={
+                    <ProtectedRoute>
+                      <HotelBooking />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/BookingConfirm"
+                  element={
+                    <ProtectedRoute>
+                      <BookingConfirm />
                     </ProtectedRoute>
                   }
                 />

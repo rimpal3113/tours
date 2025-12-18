@@ -73,7 +73,7 @@ const Destination = () => {
                 <div className="space-y-2 text-gray-700">
                  
                   <p>
-                    <span className="font-semibold">Price / Person:</span> ₹{book.price_per_person}
+                    <span className="font-semibold">Price / Person:</span> ₹{book.pack_price}
                   </p>
                   
                 </div>
