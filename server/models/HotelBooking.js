@@ -18,6 +18,9 @@ const bookingSchema = new mongoose.Schema({
   check_out_time: String,
   no_of_nights: Number,
   meal_plan: String,
+  hotel_policy: String,
+  cancellation_policy: String,
+  note: String,
 });
 
 export default mongoose.model("Booking", bookingSchema);

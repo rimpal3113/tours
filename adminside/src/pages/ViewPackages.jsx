@@ -9,12 +9,13 @@ export default function ViewPackages() {
     total_days: "",
     pack_desc: "",
     pack_price: "",
+    pack_features: "",
     pack_img: "",
     imageFile: null,
     previewImage: "",
   });
 
-  // Fetch packages from backend (UPDATED URL)
+  // FETCH PACKAGES
   useEffect(() => {
     fetch("http://localhost:5000/api/packages")
       .then((res) => res.json())
@@ -22,7 +23,7 @@ export default function ViewPackages() {
       .catch((err) => console.log("Fetch Error:", err));
   }, []);
 
-  // Start editing a package
+  // EDIT CLICK
   const handleEditClick = (pkg) => {
     setEditingId(pkg.pack_id);
     setEditFormData({
@@ -30,19 +31,20 @@ export default function ViewPackages() {
       total_days: pkg.total_days,
       pack_desc: pkg.pack_desc,
       pack_price: pkg.pack_price,
+      pack_features: pkg.pack_features || "",
       pack_img: pkg.pack_img,
       imageFile: null,
       previewImage: `http://localhost:5000/uploads/${pkg.pack_img}`,
     });
   };
 
-  // Handle input change
+  // INPUT CHANGE
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditFormData({ ...editFormData, [name]: value });
   };
 
-  // Handle image upload
+  // IMAGE CHANGE
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -54,22 +56,26 @@ export default function ViewPackages() {
     }
   };
 
-  // Save updated package (UPDATED URL)
+  // SAVE UPDATE
   const handleEditSave = async (pack_id) => {
     const formData = new FormData();
     formData.append("pack_name", editFormData.pack_name);
     formData.append("total_days", editFormData.total_days);
     formData.append("pack_desc", editFormData.pack_desc);
     formData.append("pack_price", editFormData.pack_price);
+    formData.append("features", editFormData.pack_features);
 
     if (editFormData.imageFile) {
       formData.append("pack_img", editFormData.imageFile);
     }
 
-    const res = await fetch(`http://localhost:5000/api/packages/${pack_id}`, {
-      method: "PUT",
-      body: formData,
-    });
+    const res = await fetch(
+      `http://localhost:5000/api/packages/${pack_id}`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    );
 
     if (res.ok) {
       alert("Package updated successfully!");
@@ -83,6 +89,7 @@ export default function ViewPackages() {
                 total_days: editFormData.total_days,
                 pack_desc: editFormData.pack_desc,
                 pack_price: editFormData.pack_price,
+                pack_features: editFormData.pack_features,
                 pack_img: editFormData.imageFile
                   ? editFormData.imageFile.name
                   : pkg.pack_img,
@@ -95,7 +102,7 @@ export default function ViewPackages() {
     }
   };
 
-  // Delete package (UPDATED URL)
+  // DELETE
   const handleDelete = async (pack_id) => {
     if (!window.confirm("Are you sure you want to delete this package?"))
       return;
@@ -123,17 +130,18 @@ export default function ViewPackages() {
             <tr>
               <th className="px-4 py-3">ID</th>
               <th className="px-4 py-3">Image</th>
-              <th className="px-4 py-3">Package Name</th>
+              <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Days</th>
               <th className="px-4 py-3">Description</th>
+              <th className="px-4 py-3">Features</th>
               <th className="px-4 py-3">Price (₹)</th>
               <th className="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y">
             {packages.map((pkg) => (
-              <tr key={pkg.pack_id} className="text-sm">
+              <tr key={pkg.pack_id}>
                 <td className="px-4 py-3">{pkg.pack_id}</td>
 
                 <td className="px-4 py-3">
@@ -143,10 +151,9 @@ export default function ViewPackages() {
                         ? editFormData.previewImage
                         : `http://localhost:5000/uploads/${pkg.pack_img}`
                     }
-                    alt="package"
-                    className="w-20 h-16 rounded object-cover"
+                    className="w-20 h-16 object-cover rounded"
+                    alt=""
                   />
-
                   {editingId === pkg.pack_id && (
                     <input
                       type="file"
@@ -190,10 +197,23 @@ export default function ViewPackages() {
                       value={editFormData.pack_desc}
                       onChange={handleEditChange}
                       className="border p-1 rounded w-full"
-                      rows="2"
                     />
                   ) : (
                     pkg.pack_desc
+                  )}
+                </td>
+
+                <td className="px-4 py-3">
+                  {editingId === pkg.pack_id ? (
+                    <input
+                      name="pack_features"
+                      value={editFormData.pack_features}
+                      onChange={handleEditChange}
+                      className="border p-1 rounded w-full"
+                      placeholder="hotel, meals, cab"
+                    />
+                  ) : (
+                    pkg.pack_features
                   )}
                 </td>
 
@@ -240,8 +260,8 @@ export default function ViewPackages() {
 
             {packages.length === 0 && (
               <tr>
-                <td colSpan="7" className="text-center py-4 text-gray-500">
-                  No Packages Found.
+                <td colSpan="8" className="text-center py-4 text-gray-500">
+                  No Packages Found
                 </td>
               </tr>
             )}

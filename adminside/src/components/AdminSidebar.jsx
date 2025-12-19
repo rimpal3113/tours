@@ -76,6 +76,16 @@ const AdminSidebar = () => {
             <span>HotelBooking</span>
           </NavLink>
         </li>
+
+         <li>
+         <NavLink
+            to="/admin/ViewHotelBooking"
+            className={({ isActive }) => (isActive ? activeClass : normalClass)}
+          >
+            <FaEye />
+            <span>ViewHotelBooking</span>
+          </NavLink>
+        </li>
         <li>
          <NavLink
             to="/admin/BookingConfirm"
@@ -85,6 +95,7 @@ const AdminSidebar = () => {
             <span>BookingConfirm</span>
           </NavLink>
         </li>
+        
       </ul>
     </div>
   );

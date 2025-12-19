@@ -13,6 +13,7 @@ import BookPackage from "./pages/BookPackage";
 import ViewBooking from "./pages/ViewBooking";
 import HotelBooking from "./pages/HotelBooking";
 import BookingConfirm from "./pages/BookingConfirm";
+import ViewHotelBooking from "./pages/ViewHotelBooking";
 
 const App = () => {
   return (
@@ -80,6 +81,14 @@ const App = () => {
                   element={
                     <ProtectedRoute>
                       <HotelBooking />
+                    </ProtectedRoute>
+                  }
+                />
+                 <Route
+                  path="/admin/ViewHotelBooking"
+                  element={
+                    <ProtectedRoute>
+                      <ViewHotelBooking />
                     </ProtectedRoute>
                   }
                 />
