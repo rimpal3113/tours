@@ -17,14 +17,33 @@ const ToursGrid = () => {
       .catch((err) => console.log("Fetch Error:", err));
   }, []);
 
-  // FEATURE → ICON MAP
+  // 🔹 FEATURE → ICON + COLOR MAP
   const featureIcons = {
-    hotel: <FaHotel title="Hotel" />,
-    meals: <FaUtensils title="Meals" />,
-    transfer: <FaCar title="Transfer" />,
-    cab: <FaCar title="Cab" />,
-    guide: <FaUserTie title="Guide" />,
-    sightseeing: <FaMapMarkedAlt title="Sightseeing" />,
+    hotel: {
+      icon: <FaHotel />,
+      bg: "bg-pink-500",
+      label: "Hotel",
+    },
+    meals: {
+      icon: <FaUtensils />,
+      bg: "bg-orange-500",
+      label: "Meals",
+    },
+    transfer: {
+      icon: <FaCar />,
+      bg: "bg-yellow-400",
+      label: "Transfer",
+    },
+    sightseeing: {
+      icon: <FaMapMarkedAlt />,
+      bg: "bg-purple-500",
+      label: "Sightseeing",
+    },
+    guide: {
+      icon: <FaUserTie />,
+      bg: "bg-blue-500",
+      label: "Guide",
+    },
   };
 
   return (
@@ -32,19 +51,12 @@ const ToursGrid = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-          {tours.length === 0 && (
-            <p className="text-center text-gray-600 text-lg">
-              No packages found. Please add packages.
-            </p>
-          )}
-
           {tours.map((tour) => {
-            // ✅ SAFE FEATURE PARSING
             const featuresArray = tour.pack_features
               ? tour.pack_features
                   .split(",")
-                  .map(f => f.trim().toLowerCase())
-                  .filter(f => featureIcons[f]) // remove invalid values
+                  .map((f) => f.trim().toLowerCase())
+                  .filter((f) => featureIcons[f])
               : [];
 
             return (
@@ -52,17 +64,33 @@ const ToursGrid = () => {
                 key={tour.pack_id}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition"
               >
-                <div className="relative">
-                  <img
-                    src={`http://localhost:5000/uploads/${tour.pack_img}`}
-                    alt={tour.pack_name}
-                    className="w-full h-48 object-cover"
-                  />
+                <img
+                  src={`http://localhost:5000/uploads/${tour.pack_img}`}
+                  alt={tour.pack_name}
+                  className="w-full h-48 object-cover"
+                />
 
-                  <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    {tour.total_days} Days
-                  </div>
-                </div>
+ {/* ✅ CIRCULAR ICON FEATURES */}
+ {featuresArray.length > 0 && (
+                    <div className="flex gap-4 mb-4 mt-6 ml-6">
+                      {featuresArray.map((feature, index) => {
+                        const item = featureIcons[feature];
+                        return (
+                          <div
+                            key={index}
+                            title={item.label}
+                            className={`w-10 h-10 flex items-center justify-center rounded-full text-white ${item.bg}`}
+                          >
+                            {item.icon}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+
+
+
 
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-800 mb-2">
@@ -71,26 +99,14 @@ const ToursGrid = () => {
 
                   <p className="text-gray-600 mb-4">{tour.pack_desc}</p>
 
-                  {/* ✅ FEATURES ICONS */}
-                  {featuresArray.length > 0 && (
-                    <div className="flex gap-4 text-xl text-blue-600 mb-4">
-                      {featuresArray.map((feature, index) => (
-                        <span key={index}>
-                          {featureIcons[feature]}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
+                
                   <div className="flex justify-between items-center">
-                    <div>
-                      <span className="text-2xl font-bold text-green-600">
-                        ₹{tour.pack_price}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {" "}per person
-                      </span>
-                    </div>
+                    <span className="text-2xl font-bold text-green-600">
+                      ₹{tour.pack_price}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {tour.total_days} Days
+                    </span>
                   </div>
                 </div>
               </div>

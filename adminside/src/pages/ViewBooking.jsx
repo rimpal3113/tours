@@ -28,7 +28,7 @@ const ViewBooking = () => {
 
   // Start editing a booking
   const handleEditClick = (book) => {
-    setEditingId(book.id);
+    setEditingId(book.book_id);
     setEditFormData({
       members: book.members,
       price_per_person: book.price_per_person,
@@ -61,7 +61,7 @@ const ViewBooking = () => {
   // Save updated booking
   const handleEditSave = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      const res = await fetch(`http://localhost:5000/api/bookings/${book_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editFormData),
@@ -88,7 +88,7 @@ const ViewBooking = () => {
     if (!window.confirm("Are you sure you want to delete this booking?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      const res = await fetch(`http://localhost:5000/api/bookings/${book_id}`, {
         method: "DELETE",
       });
 
@@ -127,8 +127,8 @@ const ViewBooking = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {bookings.map((book) => (
-                <tr key={book.id} className="text-sm">
-                  <td className="px-4 py-3">{book.id}</td>
+                <tr key={book.book_id} className="text-sm">
+                  <td className="px-4 py-3">{book.book_id}</td>
                   <td className="px-4 py-3">{book.pack_name}</td>
                   <td className="px-4 py-3">
                     {editingId === book.id ? (
@@ -145,7 +145,7 @@ const ViewBooking = () => {
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    {editingId === book.id ? (
+                    {editingId === book.book_id ? (
                       <input
                         type="number"
                         name="price_per_person"
@@ -159,7 +159,7 @@ const ViewBooking = () => {
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    {editingId === book.id
+                    {editingId === book.book_id
                       ? `₹${editFormData.total_price.toFixed(2)}`
                       : `₹${book.total_price}`}
                   </td>
@@ -177,7 +177,7 @@ const ViewBooking = () => {
                     )}
                   </td>
                   <td className="px-4 py-3 text-center flex justify-center gap-2">
-                    {editingId === book.id ? (
+                    {editingId === book.book_id ? (
                       <button
                         onClick={() => handleEditSave(book.id)}
                         className="bg-green-500 text-white px-3 py-1 rounded"
@@ -193,7 +193,7 @@ const ViewBooking = () => {
                       </button>
                     )}
                     <button
-                      onClick={() => handleDelete(book.id)}
+                      onClick={() => handleDelete(book.book_id)}
                       className="bg-red-500 text-white px-3 py-1 rounded"
                     >
                       Delete

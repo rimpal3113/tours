@@ -28,7 +28,7 @@ const ViewHotelBooking = () => {
     date ? new Date(date).toLocaleDateString() : "-";
 
   const generatePdf = async (booking) => {
-    const element = document.getElementById(`voucher-${booking._id}`);
+    const element = document.getElementById(`voucher-${booking.hbook_id}`);
     if (!element) {
       alert("Voucher not found");
       return;
@@ -86,7 +86,7 @@ const ViewHotelBooking = () => {
               </thead>
               <tbody>
                 {bookings.map((b) => (
-                  <tr key={b._id} className="hover:bg-gray-50">
+                  <tr key={b.hbook_id} className="hover:bg-gray-50">
                     <td className="border p-2">{b.guest_name || "-"}</td>
                     <td className="border p-2">{b.hotel_name || "-"}</td>
                     <td className="border p-2">{b.hotel_phone || "-"}</td>
@@ -127,8 +127,8 @@ const ViewHotelBooking = () => {
         {/* Hidden vouchers rendered off-screen but visible */}
         {bookings.map((b) => (
           <div
-            key={b._id}
-            id={`voucher-${b._id}`}
+            key={b.hbook_id}
+            id={`voucher-${b.hbook_id}`}
             style={{
               position: "absolute",
               top: "-10000px", // move it far above

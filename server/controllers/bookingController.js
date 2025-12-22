@@ -40,11 +40,11 @@ export const createBooking = (req, res) => {
 export const getAllBookings = (req, res) => {
   const sql = `
     SELECT 
-        b.id  ,b.pack_id, b.members, b.price_per_person, b.total_price, b.desc_txt,
+        b.book_id  ,b.pack_id, b.members, b.price_per_person, b.total_price, b.desc_txt,
       p.pack_name, p.pack_price, p.pack_desc, p.pack_img, p.total_days
     FROM booking b
     JOIN package_details p ON b.pack_id = p.pack_id
-    ORDER BY b.id DESC
+    ORDER BY b.book_id DESC
   `;
 
   db.query(sql, (err, results) => {
@@ -61,7 +61,7 @@ export const getAllBookings = (req, res) => {
 
 // Update a booking
 export const updateBooking = (req, res) => {
-  const { id } = req.params;
+  const { book_id } = req.params;
   const { members, price_per_person, desc_txt } = req.body;
 
   // Validate input
@@ -80,12 +80,12 @@ export const updateBooking = (req, res) => {
   const sql = `
     UPDATE booking
     SET members = ?, price_per_person = ?, total_price = ?, desc_txt = ?
-    WHERE id = ?
+    WHERE book_id = ?
   `;
 
   db.query(
     sql,
-    [members, price_per_person, total_price, desc_txt, id],
+    [members, price_per_person, total_price, desc_txt, book_id],
     (err, result) => {
       if (err) {
         console.error("UPDATE BOOKING ERROR:", err);
@@ -97,7 +97,7 @@ export const updateBooking = (req, res) => {
       res.json({
         message: "Booking updated successfully",
         updatedBooking: {
-          id,
+          book_id,
           members,
           price_per_person,
           total_price,
@@ -110,11 +110,11 @@ export const updateBooking = (req, res) => {
 
 // Delete a booking
 export const deleteBooking = (req, res) => {
-  const { id } = req.params;
+  const { book_id } = req.params;
 
   const sql = `DELETE FROM booking WHERE id = ?`;
 
-  db.query(sql, [id], (err, result) => {
+  db.query(sql, [book_id], (err, result) => {
     if (err) {
       console.error("DELETE BOOKING ERROR:", err);
       return res.status(500).json({ message: "Database error", error: err.sqlMessage });

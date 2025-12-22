@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.post("/", createBooking);
 router.get("/", getAllBookings);
-router.put("/:id", updateBooking);       // for editing
-router.delete("/:id", deleteBooking);    // for deleting
+router.put("/:book_id", updateBooking);       // for editing
+router.delete("/:book_id", deleteBooking);    // for deleting
 export default router;
