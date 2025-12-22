@@ -28,22 +28,26 @@ const ViewHotelBooking = () => {
     date ? new Date(date).toLocaleDateString() : "-";
 
   const generatePdf = async (booking) => {
-    const element = document.getElementById(`voucher-${booking.hbook_id}`);
-    if (!element) {
-      alert("Voucher not found");
-      return;
-    }
+  const element = document.getElementById(`voucher-${booking.hbook_id}`);
+  if (!element) {
+    alert("Voucher not found for this guest");
+    return;
+  }
 
-    const canvas = await html2canvas(element, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
+  const canvas = await html2canvas(element, { scale: 2 });
+  const imgData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  const pdf = new jsPDF("p", "mm", "a4");
+  const width = pdf.internal.pageSize.getWidth();
+  const height = (canvas.height * width) / canvas.width;
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`HotelBooking_${booking.guest_name || "Guest"}.pdf`);
-  };
+  pdf.addImage(imgData, "PNG", 0, 0, width, height);
+
+  const blob = pdf.output("blob");
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank");
+};
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

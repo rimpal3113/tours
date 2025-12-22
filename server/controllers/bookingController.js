@@ -112,7 +112,7 @@ export const updateBooking = (req, res) => {
 export const deleteBooking = (req, res) => {
   const { book_id } = req.params;
 
-  const sql = `DELETE FROM booking WHERE id = ?`;
+  const sql = `DELETE FROM booking WHERE book_id = ?`;
 
   db.query(sql, [book_id], (err, result) => {
     if (err) {

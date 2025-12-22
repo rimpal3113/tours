@@ -4,6 +4,7 @@ const ViewBooking = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
+
   const [editFormData, setEditFormData] = useState({
     members: 1,
     price_per_person: 0,
@@ -11,6 +12,7 @@ const ViewBooking = () => {
     desc_txt: "",
   });
 
+  // Fetch bookings
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -26,7 +28,7 @@ const ViewBooking = () => {
     fetchBookings();
   }, []);
 
-  // Start editing a booking
+  // Start editing
   const handleEditClick = (book) => {
     setEditingId(book.book_id);
     setEditFormData({
@@ -37,17 +39,20 @@ const ViewBooking = () => {
     });
   };
 
-  // Handle input changes and update total price live
+  // Handle edit changes
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-    let updatedData = { ...editFormData, [name]: Number(value) || value };
 
-    // Recalculate total price if members or price_per_person changes
+    let updatedData = {
+      ...editFormData,
+      [name]: name === "desc_txt" ? value : Number(value),
+    };
+
+    // Recalculate total price
     if (name === "members" || name === "price_per_person") {
       const members = Number(updatedData.members) || 0;
       const price = Number(updatedData.price_per_person) || 0;
 
-      // Optional discount logic
       let discount = 0;
       if (members >= 5 && members < 10) discount = 0.05;
       else if (members >= 10) discount = 0.1;
@@ -58,20 +63,24 @@ const ViewBooking = () => {
     setEditFormData(updatedData);
   };
 
-  // Save updated booking
-  const handleEditSave = async (id) => {
+  // Save edited booking
+  const handleEditSave = async (book_id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${book_id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editFormData),
-      });
+      const res = await fetch(
+        `http://localhost:5000/api/bookings/${book_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(editFormData),
+        }
+      );
 
       if (res.ok) {
         alert("Booking updated successfully!");
+
         setBookings(
           bookings.map((b) =>
-            b.id === id ? { ...b, ...editFormData } : b
+            b.book_id === book_id ? { ...b, ...editFormData } : b
           )
         );
         setEditingId(null);
@@ -84,17 +93,18 @@ const ViewBooking = () => {
   };
 
   // Delete booking
-  const handleDelete = async (id) => {
+  const handleDelete = async (book_id) => {
     if (!window.confirm("Are you sure you want to delete this booking?")) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${book_id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `http://localhost:5000/api/bookings/${book_id}`,
+        { method: "DELETE" }
+      );
 
       if (res.ok) {
         alert("Booking deleted!");
-        setBookings(bookings.filter((b) => b.id !== id));
+        setBookings(bookings.filter((b) => b.book_id !== book_id));
       } else {
         alert("Failed to delete booking");
       }
@@ -105,7 +115,9 @@ const ViewBooking = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">View Bookings</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+        View Bookings
+      </h1>
 
       {loading ? (
         <p className="text-center text-gray-500">Loading...</p>
@@ -116,7 +128,7 @@ const ViewBooking = () => {
           <table className="min-w-full table-auto">
             <thead className="bg-blue-600 text-white">
               <tr>
-                <th className="px-4 py-3">ID</th>
+                <th className="px-4 py-3">Booking ID</th>
                 <th className="px-4 py-3">Package Name</th>
                 <th className="px-4 py-3">Members</th>
                 <th className="px-4 py-3">Price / Person</th>
@@ -125,13 +137,15 @@ const ViewBooking = () => {
                 <th className="px-4 py-3 text-center">Actions</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-200">
               {bookings.map((book) => (
                 <tr key={book.book_id} className="text-sm">
                   <td className="px-4 py-3">{book.book_id}</td>
                   <td className="px-4 py-3">{book.pack_name}</td>
+
                   <td className="px-4 py-3">
-                    {editingId === book.id ? (
+                    {editingId === book.book_id ? (
                       <input
                         type="number"
                         name="members"
@@ -144,6 +158,7 @@ const ViewBooking = () => {
                       book.members
                     )}
                   </td>
+
                   <td className="px-4 py-3">
                     {editingId === book.book_id ? (
                       <input
@@ -158,13 +173,15 @@ const ViewBooking = () => {
                       `₹${book.price_per_person}`
                     )}
                   </td>
+
                   <td className="px-4 py-3">
                     {editingId === book.book_id
                       ? `₹${editFormData.total_price.toFixed(2)}`
                       : `₹${book.total_price}`}
                   </td>
+
                   <td className="px-4 py-3">
-                    {editingId === book.id ? (
+                    {editingId === book.book_id ? (
                       <textarea
                         name="desc_txt"
                         value={editFormData.desc_txt}
@@ -176,11 +193,12 @@ const ViewBooking = () => {
                       book.desc_txt
                     )}
                   </td>
-                  <td className="px-4 py-3 text-center flex justify-center gap-2">
+
+                  <td className="px-4 py-3 flex justify-center gap-2">
                     {editingId === book.book_id ? (
                       <button
-                        onClick={() => handleEditSave(book.id)}
-                        className="bg-green-500 text-white px-3 py-1 rounded"
+                        onClick={() => handleEditSave(book.book_id)}
+                        className="bg-green-600 text-white px-3 py-1 rounded"
                       >
                         Save
                       </button>
@@ -192,9 +210,10 @@ const ViewBooking = () => {
                         Edit
                       </button>
                     )}
+
                     <button
                       onClick={() => handleDelete(book.book_id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded"
+                      className="bg-red-600 text-white px-3 py-1 rounded"
                     >
                       Delete
                     </button>

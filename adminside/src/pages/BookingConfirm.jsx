@@ -94,7 +94,13 @@ const BookingConfirm = () => {
   
 
   return (
+
+    
     <div className="p-4 bg-gray-100 min-h-screen">
+ <h1 className="text-3xl font-bold text-gray-800 mb-6 border-b pb-3">
+  Booking Confirmation
+</h1>
+
       {/* ================= TABLE ================= */}
       <table className="w-full bg-white border text-sm">
         <thead className="bg-gray-200">
