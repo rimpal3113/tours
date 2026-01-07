@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-
+import logo from "../assets/tourlogo.jpeg"; 
 const BookingConfirm = () => {
   const [bookings, setBookings] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -17,6 +17,19 @@ const BookingConfirm = () => {
     note: "",
   });
 
+
+
+  const renderPoints = (text) => {
+    if (!text) return null;
+    return (
+      <ul className="list-disc pl-5">
+        {text.split("\n").map(
+          (item, index) =>
+            item.trim() && <li key={index}>{item}</li>
+        )}
+      </ul>
+    );
+  };
   /* ====================== FETCH BOOKINGS ====================== */
   const fetchBookings = async () => {
     try {
@@ -141,8 +154,8 @@ const BookingConfirm = () => {
         <div className="bg-white p-4 mt-4 border">
           <h3 className="font-bold mb-2">Extra Details</h3>
 
-          <textarea
-            className="border p-2 w-full mb-2"
+          <textarea rows={10} cols={20}
+            className="border p-2 w-full mb-2 "
             placeholder="Inclusions"
             value={extra.inclusions}
             onChange={(e) =>
@@ -150,7 +163,7 @@ const BookingConfirm = () => {
             }
           />
 
-          <textarea
+          <textarea rows={10} cols={20}
             className="border p-2 w-full mb-2"
             placeholder="Exclusions"
             value={extra.exclusions}
@@ -209,6 +222,12 @@ const BookingConfirm = () => {
             ref={printRef}
             className="max-w-4xl mx-auto bg-white border p-6 mt-4 text-sm"
           >
+            <div>
+            <img
+  src={logo}
+  alt="Logo"
+  className="w-24"
+/></div>
             <h1 className="text-center font-bold underline mb-4">
               BOOKING CONFIRMATION
             </h1>
@@ -216,14 +235,17 @@ const BookingConfirm = () => {
             <p><b>Guest:</b> {selected.guest_name}</p>
             <p><b>Hotel:</b> {selected.hotel_name}</p>
             <p><b>Location:</b> {selected.location}</p>
+             <p><b>No of Nights:</b> {selected.no_of_nights}</p>
+            
             <p><b>Check In:</b> {selected.check_in_date}</p>
             <p><b>Check Out:</b> {selected.check_out_date}</p>
-
-            <h3 className="font-bold mt-3">Inclusions</h3>
-            <p>{extra.inclusions}</p>
+            
+           <h3 className="font-bold mt-3">Inclusions</h3>
+            {renderPoints(extra.inclusions)}
 
             <h3 className="font-bold mt-3">Exclusions</h3>
-            <p>{extra.exclusions}</p>
+            {renderPoints(extra.exclusions)}
+
 
             <div className="border mt-4 p-3">
               <p>Total Cost: ₹ {extra.total_cost}</p>

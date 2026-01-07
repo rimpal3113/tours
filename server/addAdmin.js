@@ -2,8 +2,8 @@ import db from "./config/db.js"; // import your existing db.js
 import bcrypt from "bcrypt";
 
 // Admin credentials
-const email = "admin@example.com";
-const plainPassword = "admin123";
+const email = "adminexample@gmail.com";
+const plainPassword = "Admin@1234";
 
 // Hash the password
 bcrypt.hash(plainPassword, 10, (err, hashedPassword) => {

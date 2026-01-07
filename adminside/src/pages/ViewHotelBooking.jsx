@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-
+import logo from "../assets/tourlogo.jpeg"; // adjust path if needed
 const ViewHotelBooking = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -147,7 +147,11 @@ const ViewHotelBooking = () => {
           >
             <div className="flex justify-between items-center mb-4">
               <div>
-                <img src="/logo.png" alt="Logo" className="w-24" />
+                <img
+  src={logo}
+  alt="Logo"
+  className="w-24"
+/>
               </div>
               <div className="text-right text-sm">
               Dt. {formatDate(b.booking_date)}

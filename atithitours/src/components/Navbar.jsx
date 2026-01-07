@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { FaBars, FaTimes, FaCompass } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
+import logo from "../assets/tourlogo.jpeg"; // ✅ adjust path as needed
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -15,10 +16,16 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center py-4">
 
-          {/* Logo */}
-          <div className="flex items-center">
-            <FaCompass className="text-2xl text-blue-600 mr-2" />
-            <span className="text-xl font-bold text-gray-800">Atithi Tours</span>
+          {/* Logo (Imported Image) */}
+          <div className="flex items-center gap-2">
+         <img
+  src={logo}
+  alt="Atithi Tours Logo"
+  className="h-10 w-40"
+/>
+
+
+            
           </div>
 
           {/* Desktop Menu */}

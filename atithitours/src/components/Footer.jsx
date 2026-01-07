@@ -1,4 +1,14 @@
-import { FaCompass, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaYoutube,
+  FaPhone,
+  FaEnvelope,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
+
+import logo from "../assets/tourlogo.jpeg"; // ✅ adjust path if needed
 
 const Footer = () => {
   return (
@@ -9,9 +19,13 @@ const Footer = () => {
 
           {/* Brand */}
           <div>
-            <div className="flex items-center mb-4">
-              <FaCompass className="text-2xl text-blue-400 mr-2" />
-              <span className="text-xl font-bold">Atithi Tours</span>
+            <div className="flex items-center mb-4 gap-2">
+              <img
+                src={logo}
+                alt="Atithi Tours Logo"
+                className="h-10 w-40"
+              />
+             
             </div>
 
             <p className="text-gray-400 mb-4">
@@ -19,10 +33,18 @@ const Footer = () => {
             </p>
 
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition duration-300"><FaFacebookF /></a>
-              <a href="#" className="text-gray-400 hover:text-white transition duration-300"><FaTwitter /></a>
-              <a href="#" className="text-gray-400 hover:text-white transition duration-300"><FaInstagram /></a>
-              <a href="#" className="text-gray-400 hover:text-white transition duration-300"><FaYoutube /></a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <FaFacebookF />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <FaTwitter />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <FaInstagram />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition">
+                <FaYoutube />
+              </a>
             </div>
           </div>
 
